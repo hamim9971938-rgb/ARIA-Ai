@@ -2,36 +2,30 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # ১. প্রথমে রিপোজিটরি চেকআউট করতে হবে
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # ২. এরপর Java এবং Gradle Caching সেটআপ হবে
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
 
-    # ৩. gradlew-কে এক্সিকিউট পারমিশন দেওয়া
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    # ৪. APK বিল্ড করা
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
-    # ৫. বিল্ড হওয়া APK ফাইলটি ডাউনলোড অপশনে যুক্ত করা
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
